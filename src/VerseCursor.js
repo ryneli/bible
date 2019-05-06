@@ -7,37 +7,64 @@ export class VerseCursor {
         this.book = Number(book);
         this.chapter = Number(chapter);
         this.verse = Number(verse);
+        this.verseEnd = this.verse;
+        this.verseCn = ChiUns.books[this.book].chapters[this.chapter].verses[this.verse].text;
+        this.verseEn = ESV.books[this.book].chapters[this.chapter].verses[this.verse].text;
+
+        this.reviseVerse();
+    }
+
+    reviseVerse() {
+        const next = this.verse + 1;
+        if (next >= ChiUns.books[this.book].chapters[this.chapter].verses[this.verse].length) {
+            return;
+        }
+
+        console.log('VerseCursor#reviseVerse %o', ChiUns.books[this.book].chapters[this.chapter].verses[next].text);
+
+        if (ChiUns.books[this.book].chapters[this.chapter].verses[next].text === null) {
+            this.verseEn += ESV.books[this.book].chapters[this.chapter].verses[next].text;
+            this.verseEnd += 1;
+        } else if (ESV.books[this.book].chapters[this.chapter].verses[next].text === null) {
+            this.verseCn += ChiUns.books[this.book].chapters[this.chapter].verses[next].text;
+            this.verseEnd += 1;
+        }
     }
     
     equals(that) {
         return this.book === that.book 
         && this.chapter === that.chapter 
-        && this.verse === that.verse;
+        && this.verse === that.verse
+        && this.verseEnd === that.verseEnd;
     }
 
     getVerseNumber() {
-        return (this.chapter+1) + ':' + (this.verse+1);
+        if (this.verseEnd === this.verse) {
+            return (this.chapter + 1) + ':' + (this.verse + 1);
+        } else {
+            return (this.chapter + 1) + ':' + (this.verse + 1) + '-' + (this.verseEnd + 1);
+        }
     }
 
     getVerse() {
-        return ChiUns.books[this.book].chapters[this.chapter].verses[this.verse].text
-        + '\n' + ESV.books[this.book].chapters[this.chapter].verses[this.verse].text;
+        return this.verseCn
+        + '\n' + this.verseEn;
     }
 
     getVerseCn() {
-        return ChiUns.books[this.book].chapters[this.chapter].verses[this.verse].text;
+        return this.verseCn;
     }
 
     getVerseEn() {
-        return ESV.books[this.book].chapters[this.chapter].verses[this.verse].text;
+        return this.verseEn;
     }
 
     next() {
-        if (ChiUns.books[this.book].chapters[this.chapter].verses[this.verse + 1]) {
-            return new VerseCursor(this.book, this.chapter, this.verse + 1);
-        } else if (ChiUns.books[this.book].chapters[this.chapter + 1]) {
+        if (ChiUns.books[this.book].chapters[this.chapter].verses.length > this.verseEnd + 1) {
+            return new VerseCursor(this.book, this.chapter, this.verseEnd + 1);
+        } else if (ChiUns.books[this.book].chapters.length > this.chapter + 1) {
             return new VerseCursor(this.book, this.chapter + 1, 0);
-        } else if (ChiUns.books[this.book+1]) {
+        } else if (ChiUns.books.length > this.book+1) {
             return new VerseCursor(this.book + 1, 0, 0);
         } else {
             return null;

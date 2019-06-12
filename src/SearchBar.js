@@ -37,10 +37,11 @@ class SearchBar extends Component {
             type='text'
             onKeyUp={(evt) => this.onSearchTextBoxKeyUp(evt)}
             placeholder='eg: John3:16'
-            style={{fontSize: '40px'}}
             ></input>
-            <button onClick={() => this.onSearchClicked()}
-            style={{fontSize: '40px'}}
+            <button 
+            id='search-button'
+            disabled={this.state.osisText === null || this.state.osisText === ''}
+            onClick={() => this.onSearchClicked()}
             >Search</button>
         </div>);
     }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './VerseSlide.css';
 
 class VerseSlide extends Component {
     constructor(props) {
@@ -7,7 +8,7 @@ class VerseSlide extends Component {
 
     render() {
         return (
-        <div style={{fontSize: '40px'}}>
+        <div class='verses'>
             {this.props.value.getVerseNumber()} {this.props.value.getVerseCn()}
             <br/>
             {this.props.value.getVerseNumber()} {this.props.value.getVerseEn()}

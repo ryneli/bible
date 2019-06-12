@@ -6,7 +6,6 @@ import {VerseCursor} from './VerseCursor';
 import {AppStateStore} from './store';
 
 import SearchBar from './SearchBar';
-import VerseList from './VerseList';
 import VerseSlide from './VerseSlide';
 var ESV = require('./assets/ESV.json');
 var ChiUns = require('./assets/ChiUns.json');
@@ -49,9 +48,11 @@ class App extends Component {
   onKeyDown(e) {
     switch(e.keyCode) {
       case /* ArrowRight = */ 39 :
+      case /* Period = */ 190:
         this.nextVerse();
         break;
       case /* ArrowLeft = */ 37:
+      case /* Comma = */ 188:
         this.previousVerse();
         break;
       case /* Escape = */ 27:
@@ -63,21 +64,15 @@ class App extends Component {
   }
 
   nextVerse() {
-    if (this.state.verseList.length > 0) {
-      let next = this.state.current + 1;
-      if (next === this.state.verseList.length) {
-        next = 0;
-      }
+    const next = this.state.current + 1;
+    if (this.state.verseList.length > 0 && next < this.state.verseList.length) {
       this.setState({current: next});
     }
   }
 
   previousVerse() {
-    if (this.state.verseList.length > 0) {
-      let next = this.state.current - 1;
-      if (next === -1) {
-        next = this.state.verseList.length - 1;
-      }
+    const next = this.state.current - 1;
+    if (this.state.verseList.length > 0 && next >= 0) {
       this.setState({current: next});
     }
   }

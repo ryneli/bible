@@ -12,6 +12,7 @@ class SearchBar extends Component {
             osisText: null,
         };
     }
+    
     onSearchClicked() {
         AppStateStore.updateOsisText(this.state.osisText);
     }
@@ -33,16 +34,22 @@ class SearchBar extends Component {
         return (
         <div >
             <input 
-            id='search-textbox' 
+            class='search-textbox' 
             type='text'
             onKeyUp={(evt) => this.onSearchTextBoxKeyUp(evt)}
             placeholder='eg: John3:16'
             ></input>
             <button 
-            id='search-button'
+            class='search-button'
             disabled={this.state.osisText === null || this.state.osisText === ''}
             onClick={() => this.onSearchClicked()}
             >Search</button>
+            <br/>
+            <ul class="instruction">
+                <li><span class='key'>ESC</span> : get back to search bar</li>
+                <li><span class='key'>&#8592;</span> / <span class='key'>,</span>: go to previous verse</li>
+                <li><span class='key'>&#8594;</span> / <span class='key'>.</span>: go to next verse</li>
+            </ul>
         </div>);
     }
 }

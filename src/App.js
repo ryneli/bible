@@ -39,7 +39,7 @@ class App extends Component {
           subVerseList.forEach((e) => verseList.push(e));
         });
 
-        this.setState({verseList});
+        this.setState({verseList, current: 0});
       }
     );
     

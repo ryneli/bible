@@ -14,7 +14,13 @@ class SearchBar extends Component {
     }
 
     onKeyDown(e) {
-        this.updateOsisText(e);
+        switch(e.keyCode) {
+            case /* Enter = */ 13:
+                this.onSearchClicked();
+                break;
+            default:
+                this.updateOsisText(e);
+        }
     }
     
     onSearchClicked() {

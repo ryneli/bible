@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import {AppStateStore} from './store';
 import './SearchBar.css';
-var bcv_parser = require("bible-passage-reference-parser/js/full_bcv_parser").bcv_parser;
-var bcv = new bcv_parser();
+import {formatQueryToOsis} from './verse_utils';
 
 class SearchBar extends Component {
     constructor(props) {
@@ -15,13 +14,7 @@ class SearchBar extends Component {
     }
 
     onKeyDown(e) {
-        switch(e.keyCode) {
-            case /* Enter = */ 13 :
-                AppStateStore.updateOsisText(this.state.osisText);
-                break;
-            default:
-                this.updateOsisText(e);
-        }
+        this.updateOsisText(e);
     }
     
     onSearchClicked() {
@@ -30,12 +23,11 @@ class SearchBar extends Component {
 
     updateOsisText(e) {
         var elem = e.srcElement || e.target;
-        var currValue = elem.value + String.fromCharCode(e.keyCode)
-        if (currValue !== undefined) {
-            bcv.parse(currValue);
+        var inputBoxValue = elem.value + String.fromCharCode(e.keyCode)
+        if (inputBoxValue !== undefined) {
             this.setState({
                 searchText: elem.value,
-                osisText: bcv.osis(),
+                osisText: formatQueryToOsis(inputBoxValue),
             });
         }
     }

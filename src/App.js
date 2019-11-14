@@ -4,6 +4,7 @@ import './SearchBar';
 import './VerseSlide';
 import {VerseCursor} from './VerseCursor';
 import {AppStateStore} from './store';
+import {getOsisList} from './verse_utils';
 
 import SearchBar from './SearchBar';
 import VerseSlide from './VerseSlide';
@@ -24,12 +25,7 @@ class App extends Component {
       {
         
         const verseList = [];
-        let osisTextList = [];
-        if (osisText.includes(',')) {
-          osisTextList = osisText.split(',').map((s) => s.trim());
-        } else if (osisText !== '') {
-          osisTextList.push(osisText);
-        }
+        let osisTextList = getOsisList(osisText);
         
         console.log('App#updateVerse osisTextList %o', osisTextList);
         osisTextList.forEach((s) => {

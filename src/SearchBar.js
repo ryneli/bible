@@ -11,23 +11,33 @@ class SearchBar extends Component {
             searchText: null,
             osisText: null,
         };
+        document.addEventListener('keydown', (e) => this.onKeyDown(e));
+    }
+
+    onKeyDown(e) {
+        switch(e.keyCode) {
+            case /* Enter = */ 13 :
+                AppStateStore.updateOsisText(this.state.osisText);
+                break;
+            default:
+                this.updateOsisText(e);
+        }
     }
     
     onSearchClicked() {
         AppStateStore.updateOsisText(this.state.osisText);
     }
 
-    onSearchTextBoxKeyUp(e) {
-        if (e.keycode === 13) {
-            AppStateStore.updateOsisText(this.state.osisText);
-            return;
-        }
+    updateOsisText(e) {
         var elem = e.srcElement || e.target;
-        bcv.parse(elem.value);
-        this.setState({
-            searchText: elem.value,
-            osisText: bcv.osis(),
-        });
+        var currValue = elem.value + String.fromCharCode(e.keyCode)
+        if (currValue !== undefined) {
+            bcv.parse(currValue);
+            this.setState({
+                searchText: elem.value,
+                osisText: bcv.osis(),
+            });
+        }
     }
 
     render() {
@@ -36,8 +46,8 @@ class SearchBar extends Component {
             <input 
             class='search-textbox' 
             type='text'
-            onKeyUp={(evt) => this.onSearchTextBoxKeyUp(evt)}
             placeholder='eg: John3:16'
+            onKeyDown={this.onKeyDown.bind(this)}
             ></input>
             <button 
             class='search-button'
